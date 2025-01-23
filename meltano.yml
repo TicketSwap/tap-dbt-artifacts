@@ -1,13 +1,13 @@
 version: 1
 send_anonymous_usage_stats: true
-project_id: "tap-dbt-artifacts"
+project_id: tap-dbt-artifacts
 default_environment: test
 environments:
 - name: test
 plugins:
   extractors:
-  - name: "tap-dbt-artifacts"
-    namespace: "tap_dbt_artifacts"
+  - name: tap-dbt-artifacts
+    namespace: tap_dbt_artifacts
     pip_url: -e .
     capabilities:
     - state
@@ -17,13 +17,17 @@ plugins:
     - stream-maps
 
     # TODO: Declare settings and their types here:
+    settings_group_validation:
+    - [username, password]
+
+    # TODO: Declare default configuration values here:
     settings:
     - name: username
       label: Username
       description: The username to use for authentication
 
     - name: password
-      kind: password
+      kind: string
       label: Password
       description: The password to use for authentication
       sensitive: true
@@ -34,10 +38,6 @@ plugins:
       description: Initial date to start extracting data from
 
     # TODO: Declare required settings here:
-    settings_group_validation:
-    - [username, password]
-
-    # TODO: Declare default configuration values here:
     config:
       start_date: '2010-01-01T00:00:00Z'
 
@@ -45,3 +45,6 @@ plugins:
   - name: target-jsonl
     variant: andyh1203
     pip_url: target-jsonl
+  - name: target-redshift
+    variant: ticketswap
+    pip_url: git+https://github.com/TicketSwap/target-redshift.git

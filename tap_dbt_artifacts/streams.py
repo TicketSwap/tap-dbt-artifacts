@@ -1,64 +1,232 @@
-"""Stream type classes for tap-dbt-artifacts."""
-
-from __future__ import annotations
-
-import typing as t
-from importlib import resources
-
-from singer_sdk import typing as th  # JSON Schema typing helpers
-
+from typing import Dict, List, Iterable
 from tap_dbt_artifacts.client import DbtArtifactsStream
+from pathlib import Path
 
-# TODO: Delete this is if not using json files for schema definition
-SCHEMAS_DIR = resources.files(__package__) / "schemas"
-# TODO: - Override `UsersStream` and `GroupsStream` with your own stream definition.
-#       - Copy-paste as many times as needed to create multiple stream types.
+SCHEMAS_DIR = Path(__file__).parent / "schemas"
 
 
-class UsersStream(DbtArtifactsStream):
-    """Define custom stream."""
+class RunResultsStream(DbtArtifactsStream):
+    """Stream for run_results.json."""
 
-    name = "users"
-    primary_keys: t.ClassVar[list[str]] = ["id"]
-    replication_key = None
-    # Optionally, you may also use `schema_filepath` in place of `schema`:
-    # schema_filepath = SCHEMAS_DIR / "users.json"  # noqa: ERA001
-    schema = th.PropertiesList(
-        th.Property("name", th.StringType),
-        th.Property(
-            "id",
-            th.StringType,
-            description="The user's system ID",
-        ),
-        th.Property(
-            "age",
-            th.IntegerType,
-            description="The user's age in years",
-        ),
-        th.Property(
-            "email",
-            th.StringType,
-            description="The user's email address",
-        ),
-        th.Property("street", th.StringType),
-        th.Property("city", th.StringType),
-        th.Property(
-            "state",
-            th.StringType,
-            description="State name in ISO 3166-2 format",
-        ),
-        th.Property("zip", th.StringType),
-    ).to_dict()
+    name = "run_results"
+    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key = "generated_at"
+    schema_filepath = SCHEMAS_DIR / "run-results.schema.json"
+
+    def extract_records(self, data: dict) -> Iterable[dict]:
+        """Extract records from the artifact JSON.
+
+        Child classes must implement this to yield individual records.
+
+        Args:
+            data: Parsed JSON content of the run results artifact.
+
+        Yields:
+            Individual records to be output by the stream.
+        """
+        # Extract required fields from metadata
+        metadata = data.get("metadata", {})
+        invocation_id = metadata.get("invocation_id")
+        generated_at = metadata.get("generated_at")
+
+        # Extract top-level keys
+        results = data.get("results", [])
+        elapsed_time = data.get("elapsed_time", 0)
+        args = data.get("args", {})
+
+        # Yield each result record
+        for result in results:
+            unique_id = result.get("unique_id")
+
+            record = {
+                "artifact_type": "run_results",
+                "invocation_id": invocation_id,
+                "unique_id": unique_id,
+                "generated_at": generated_at,
+                "metadata": metadata,
+                "results": result,
+                "elapsed_time": elapsed_time,
+                "args": args,
+            }
+
+            yield record
 
 
-class GroupsStream(DbtArtifactsStream):
-    """Define custom stream."""
+class ManifestStream(DbtArtifactsStream):
+    """Stream for manifest.json."""
 
-    name = "groups"
-    primary_keys: t.ClassVar[list[str]] = ["id"]
-    replication_key = "modified"
-    schema = th.PropertiesList(
-        th.Property("name", th.StringType),
-        th.Property("id", th.StringType),
-        th.Property("modified", th.DateTimeType),
-    ).to_dict()
+    name = "manifest"
+    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key = "generated_at"
+    schema_filepath = SCHEMAS_DIR / "manifest.schema.json"
+
+    def extract_records(self, data: dict) -> Iterable[dict]:
+        """Extract records from the manifest.json file.
+
+        Args:
+            data: Parsed JSON content of the manifest artifact.
+
+        Yields:
+            Individual records to be output by the stream.
+        """
+        # Extract required fields from metadata
+        metadata = data.get("metadata", {})
+        invocation_id = metadata.get("invocation_id")
+        generated_at = metadata.get("generated_at")
+
+        # Define top-level keys
+        top_level_keys = [
+            "nodes",
+            "sources",
+            "macros",
+            "docs",
+            "exposures",
+            "metrics",
+            "groups",
+            "selectors",
+            "disabled",
+            "saved_queries",
+            "semantic_models",
+            "unit_tests",
+        ]
+
+        # Extract mappings
+        parent_map = data.get("parent_map", {})
+        children_map = data.get("child_map", {})
+        group_map = data.get("group_map", {})
+
+        # Yield records for each top-level key
+        for key in top_level_keys:
+            # Extract items for each key
+            try:
+                items = data.get(key, {}).values()
+            except AttributeError:
+                items = []
+
+            for item in items:
+                # Convert columns key to a list of dictionaries
+                item = self._listify(item, "columns")
+
+                # Get the unique_id of each item
+                unique_id = item.get("unique_id")
+
+                # Get parent and children nodes if item is a node or source
+                if key == "nodes" or key == "sources":
+                    parents = parent_map.get(unique_id, [])
+                    children = children_map.get(unique_id, [])
+                    item["parents"] = parents
+                    item["children"] = children
+
+                # Get resources if item is a group
+                if key == "groups":
+                    resources = group_map.get(unique_id, [])
+                    item["resources"] = resources
+
+                # Build and yield the record
+                record = {
+                    "artifact_type": "manifest",
+                    "invocation_id": invocation_id,
+                    "unique_id": unique_id,
+                    "generated_at": generated_at,
+                    "metadata": metadata,
+                    key: item,
+                }
+
+                yield record
+
+
+class CatalogStream(DbtArtifactsStream):
+    """Stream for catalog.json."""
+
+    name = "catalog"
+    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key = "generated_at"
+    schema_filepath = SCHEMAS_DIR / "catalog.schema.json"
+
+    def extract_records(self, data: dict) -> Iterable[dict]:
+        """Extract records from the catalog.json file.
+
+        Args:
+            data: Parsed JSON content of the catalog artifact.
+
+        Yields:
+            Individual records to be output by the stream.
+        """
+        # Extract required fields from metadata
+        metadata = data.get("metadata", {})
+        invocation_id = metadata.get("invocation_id")
+        generated_at = metadata.get("generated_at")
+
+        # Define top-level keys
+        top_level_keys = ["nodes", "sources", "errors"]
+
+        # Yield records for each top-level key
+        for key in top_level_keys:
+            # Extract items for each key
+            try:
+                items = data.get(key, {}).values()
+            except AttributeError:
+                items = []
+
+            for item in items:
+                # Convert columns and stats key to lists of dictionaries
+                item = self._listify(item, "columns")
+                item = self._listify(item, "stats")
+
+                # Get the unique_id of each item
+                unique_id = item.get("unique_id")
+
+                # Build and yield the record
+                record = {
+                    "artifact_type": "catalog",
+                    "invocation_id": invocation_id,
+                    "unique_id": unique_id,
+                    "generated_at": generated_at,
+                    "metadata": metadata,
+                    key: item,
+                }
+
+                yield record
+
+
+class SourcesStream(DbtArtifactsStream):
+    """Stream for sources.json."""
+
+    name = "sources"
+    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key = "generated_at"
+    schema_filepath = SCHEMAS_DIR / "sources.schema.json"
+
+    def extract_records(self, data: dict) -> Iterable[dict]:
+        """Extract records from the sources.json file.
+
+        Args:
+            data: Parsed JSON content of the sources artifact.
+
+        Yields:
+            Individual records to be output by the stream.
+        """
+        # Extract required fields from metadata
+        metadata = data.get("metadata", {})
+        invocation_id = metadata.get("invocation_id")
+        generated_at = metadata.get("generated_at")
+
+        # Extract top-level keys
+        results = data.get("results", [])
+        elapsed_time = data.get("elapsed_time", 0)
+
+        # Yield each result record
+        for result in results:
+            unique_id = result.get("unique_id")
+
+            record = {
+                "artifact_type": "sources",
+                "invocation_id": invocation_id,
+                "unique_id": unique_id,
+                "generated_at": generated_at,
+                "metadata": metadata,
+                "results": result,
+                "elapsed_time": elapsed_time,
+            }
+
+            yield record
