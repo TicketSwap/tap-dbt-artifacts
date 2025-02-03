@@ -1,6 +1,5 @@
 """DbtArtifacts tap class."""
 
-
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
 
@@ -20,7 +19,12 @@ class TapDbtArtifacts(Tap):
     name = "tap-dbt-artifacts"
 
     config_jsonschema = th.PropertiesList(
-        th.Property("dbt_target_dir", th.StringType, required=True),
+        th.Property(
+            name="dbt_target_dir",
+            wrapped=th.StringType,
+            required=True,
+            default="target",
+        ),
     ).to_dict()
 
     def discover_streams(self) -> list[Stream]:

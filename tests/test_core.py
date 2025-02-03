@@ -5,7 +5,7 @@ from singer_sdk.testing import get_tap_test_class
 from tap_dbt_artifacts.tap import TapDbtArtifacts
 
 SAMPLE_CONFIG = {
-    "dbt_target_dir": "/path/to/dbt/target",
+    "dbt_target_dir": "target",
 }
 
 

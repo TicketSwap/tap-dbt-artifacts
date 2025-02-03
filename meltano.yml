@@ -3,36 +3,32 @@ send_anonymous_usage_stats: true
 project_id: tap-dbt-artifacts
 default_environment: test
 environments:
-- name: test
+  - name: test
 plugins:
   extractors:
-  - name: tap-dbt-artifacts
-    namespace: tap_dbt_artifacts
-    pip_url: -e .
-    capabilities:
-    - state
-    - catalog
-    - discover
-    - about
-    - stream-maps
+    - name: tap-dbt-artifacts
+      namespace: tap_dbt_artifacts
+      pip_url: -e .
+      capabilities:
+        - state
+        - catalog
+        - discover
+        - about
+        - stream-maps
 
-    # TODO: Declare settings and their types here:
-    settings_group_validation:
-    - [dbt_target_dir]
+      settings_group_validation:
+        - [dbt_target_dir]
 
-    settings:
-    - name: dbt_target_dir
-      kind: string
-      label: dbt target directory
-      description: The path to the dbt target directory
+      settings:
+        - name: dbt_target_dir
+          kind: string
+          label: dbt target directory
+          description: The path to the dbt target directory
 
-    config:
-      dbt_target_dir: target
+      config:
+        dbt_target_dir: target
 
   loaders:
-  - name: target-jsonl
-    variant: andyh1203
-    pip_url: target-jsonl
-  - name: target-redshift
-    variant: ticketswap
-    pip_url: git+https://github.com/TicketSwap/target-redshift.git
+    - name: target-jsonl
+      variant: andyh1203
+      pip_url: target-jsonl
