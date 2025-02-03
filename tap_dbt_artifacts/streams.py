@@ -1,6 +1,10 @@
-from typing import Dict, List, Iterable
-from tap_dbt_artifacts.client import DbtArtifactsStream
+"""Stream classes for tap-dbt-artifacts."""
+
+from collections.abc import Iterable
 from pathlib import Path
+from typing import ClassVar
+
+from tap_dbt_artifacts.client import DbtArtifactsStream
 
 SCHEMAS_DIR = Path(__file__).parent / "schemas"
 
@@ -8,10 +12,10 @@ SCHEMAS_DIR = Path(__file__).parent / "schemas"
 class RunResultsStream(DbtArtifactsStream):
     """Stream for run_results.json."""
 
-    name = "run_results"
-    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
-    replication_key = "generated_at"
-    schema_filepath = SCHEMAS_DIR / "run-results.schema.json"
+    name: ClassVar[str] = "run_results"
+    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key: ClassVar[str] = "generated_at"
+    schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "run-results.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
         """Extract records from the artifact JSON.
@@ -55,10 +59,10 @@ class RunResultsStream(DbtArtifactsStream):
 class ManifestStream(DbtArtifactsStream):
     """Stream for manifest.json."""
 
-    name = "manifest"
-    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
-    replication_key = "generated_at"
-    schema_filepath = SCHEMAS_DIR / "manifest.schema.json"
+    name: ClassVar[str] = "manifest"
+    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key: ClassVar[str] = "generated_at"
+    schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "manifest.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
         """Extract records from the manifest.json file.
@@ -105,22 +109,22 @@ class ManifestStream(DbtArtifactsStream):
 
             for item in items:
                 # Convert columns key to a list of dictionaries
-                item = self._listify(item, "columns")
+                parsed_item = self._listify(item, ["columns"])
 
                 # Get the unique_id of each item
-                unique_id = item.get("unique_id")
+                unique_id = parsed_item.get("unique_id")
 
                 # Get parent and children nodes if item is a node or source
-                if key == "nodes" or key == "sources":
+                if key in ("nodes", "sources"):
                     parents = parent_map.get(unique_id, [])
                     children = children_map.get(unique_id, [])
-                    item["parents"] = parents
-                    item["children"] = children
+                    parsed_item["parents"] = parents
+                    parsed_item["children"] = children
 
                 # Get resources if item is a group
                 if key == "groups":
                     resources = group_map.get(unique_id, [])
-                    item["resources"] = resources
+                    parsed_item["resources"] = resources
 
                 # Build and yield the record
                 record = {
@@ -129,7 +133,7 @@ class ManifestStream(DbtArtifactsStream):
                     "unique_id": unique_id,
                     "generated_at": generated_at,
                     "metadata": metadata,
-                    key: item,
+                    key: parsed_item,
                 }
 
                 yield record
@@ -138,10 +142,10 @@ class ManifestStream(DbtArtifactsStream):
 class CatalogStream(DbtArtifactsStream):
     """Stream for catalog.json."""
 
-    name = "catalog"
-    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
-    replication_key = "generated_at"
-    schema_filepath = SCHEMAS_DIR / "catalog.schema.json"
+    name: ClassVar[str] = "catalog"
+    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key: ClassVar[str] = "generated_at"
+    schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "catalog.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
         """Extract records from the catalog.json file.
@@ -170,11 +174,10 @@ class CatalogStream(DbtArtifactsStream):
 
             for item in items:
                 # Convert columns and stats key to lists of dictionaries
-                item = self._listify(item, "columns")
-                item = self._listify(item, "stats")
+                parsed_item = self._listify(item, ["columns", "stats"])
 
                 # Get the unique_id of each item
-                unique_id = item.get("unique_id")
+                unique_id = parsed_item.get("unique_id")
 
                 # Build and yield the record
                 record = {
@@ -183,7 +186,7 @@ class CatalogStream(DbtArtifactsStream):
                     "unique_id": unique_id,
                     "generated_at": generated_at,
                     "metadata": metadata,
-                    key: item,
+                    key: parsed_item,
                 }
 
                 yield record
@@ -192,10 +195,10 @@ class CatalogStream(DbtArtifactsStream):
 class SourcesStream(DbtArtifactsStream):
     """Stream for sources.json."""
 
-    name = "sources"
-    primary_keys = ["artifact_type", "invocation_id", "unique_id"]
-    replication_key = "generated_at"
-    schema_filepath = SCHEMAS_DIR / "sources.schema.json"
+    name: ClassVar[str] = "sources"
+    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    replication_key: ClassVar[str] = "generated_at"
+    schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "sources.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
         """Extract records from the sources.json file.
