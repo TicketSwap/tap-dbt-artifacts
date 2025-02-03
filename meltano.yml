@@ -18,28 +18,16 @@ plugins:
 
     # TODO: Declare settings and their types here:
     settings_group_validation:
-    - [username, password]
+    - [dbt_target_dir]
 
-    # TODO: Declare default configuration values here:
     settings:
-    - name: username
-      label: Username
-      description: The username to use for authentication
-
-    - name: password
+    - name: dbt_target_dir
       kind: string
-      label: Password
-      description: The password to use for authentication
-      sensitive: true
+      label: dbt target directory
+      description: The path to the dbt target directory
 
-    - name: start_date
-      kind: date_iso8601
-      label: Start Date
-      description: Initial date to start extracting data from
-
-    # TODO: Declare required settings here:
     config:
-      start_date: '2010-01-01T00:00:00Z'
+      dbt_target_dir: target
 
   loaders:
   - name: target-jsonl
