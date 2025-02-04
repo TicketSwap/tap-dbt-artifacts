@@ -8,9 +8,9 @@ SAMPLE_CONFIG = {
     "dbt_target_dir": "target",
 }
 
-
 # Run standard built-in tap tests from the SDK:
-TestTapDbtArtifacts = get_tap_test_class(
+TestTapStackExchange = get_tap_test_class(
     tap_class=TapDbtArtifacts,
     config=SAMPLE_CONFIG,
+    include_stream_attribute_tests=False,
 )

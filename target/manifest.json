@@ -1,0 +1,226 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/manifest/v12.json",
+    "dbt_version": "1.9.1",
+    "generated_at": "2025-02-04T10:52:12.453970Z",
+    "invocation_id": "e74a89ea-c7e9-4ee6-a5c0-e0eb9523412c",
+    "env": {},
+    "project_name": "data_transformations",
+    "project_id": "1f5168ab69506edd9c383b8e27ca6c45",
+    "user_id": null,
+    "send_anonymous_usage_stats": true,
+    "adapter_type": "redshift"
+  },
+  "nodes": {
+    "sample_node": {
+      "database": "databse",
+      "schema": "schema",
+      "name": "sample_node",
+      "resource_type": "model",
+      "package_name": "project_name",
+      "path": "sample_node.sql",
+      "original_file_path": "sample_node.sql",
+      "unique_id": "sample_node",
+      "fqn": ["path", "to", "sample_node"],
+      "alias": "sample_node",
+      "checksum": {
+        "name": "sha256",
+        "checksum": "checksum"
+      },
+      "config": {
+        "enabled": true,
+        "alias": null,
+        "schema": null,
+        "database": null,
+        "tags": [],
+        "meta": {},
+        "group": null,
+        "materialized": "view",
+        "incremental_strategy": "merge",
+        "batch_size": null,
+        "lookback": 1,
+        "begin": null,
+        "persist_docs": {},
+        "post-hook": [],
+        "pre-hook": [],
+        "quoting": {},
+        "column_types": {},
+        "full_refresh": null,
+        "unique_key": null,
+        "on_schema_change": "sync_all_columns",
+        "on_configuration_change": "apply",
+        "grants": { "select": ["role analyst"] },
+        "packages": [],
+        "docs": { "show": true, "node_color": null },
+        "contract": { "enforced": false, "alias_types": true },
+        "event_time": null,
+        "concurrent_batches": null,
+        "access": "protected",
+        "bind": false,
+        "dbt-osmosis": "{model}.yml"
+      },
+      "tags": [],
+      "description": "sample description",
+      "columns": {
+        "col_1": {
+          "name": "col_1",
+          "description": "",
+          "meta": {},
+          "data_type": "integer",
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "col_2": {
+          "name": "col_2",
+          "description": "",
+          "meta": {},
+          "data_type": "integer",
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        }
+      },
+      "meta": {},
+      "group": null,
+      "docs": { "show": true, "node_color": null },
+      "patch_path": "path",
+      "build_path": null,
+      "unrendered_config": {
+        "dbt-osmosis": "{model}.yml",
+        "on_schema_change": "sync_all_columns",
+        "bind": false,
+        "incremental_strategy": "merge",
+        "grants": { "select": ["role"] },
+        "materialized": "view",
+        "schema": "schema"
+      },
+      "created_at": 1738663616.3655,
+      "relation_name": "name",
+      "raw_code": "select 1 from dummy_table",
+      "language": "sql",
+      "refs": [],
+      "sources": [["sample_source"]],
+      "metrics": [],
+      "depends_on": {
+        "macros": [],
+        "nodes": ["sample_source"]
+      },
+      "compiled_path": null,
+      "contract": { "enforced": false, "alias_types": true, "checksum": null },
+      "access": "protected",
+      "constraints": [],
+      "version": null,
+      "latest_version": null,
+      "deprecation_date": null,
+      "primary_key": ["primary_key_col_1", "primary_key_col_2"],
+      "time_spine": null
+    }
+  },
+  "sources": {
+    "sample_source": {
+      "database": "database",
+      "schema": "schema",
+      "name": "sample_source",
+      "resource_type": "source",
+      "package_name": "project_name",
+      "path": "path",
+      "original_file_path": "path",
+      "unique_id": "sample_source",
+      "fqn": ["path", "to", "sample_source"],
+      "source_name": "sample_source",
+      "source_description": "sample source description",
+      "loader": "",
+      "identifier": "sample_source_id",
+      "quoting": {
+        "database": null,
+        "schema": null,
+        "identifier": null,
+        "column": null
+      },
+      "loaded_at_field": null,
+      "freshness": {
+        "warn_after": { "count": null, "period": null },
+        "error_after": { "count": null, "period": null },
+        "filter": null
+      },
+      "external": null,
+      "description": "",
+      "columns": {
+        "col_1": {
+          "name": "col_1",
+          "description": "",
+          "meta": {},
+          "data_type": "integer",
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        },
+        "col_2": {
+          "name": "col_2",
+          "description": "",
+          "meta": {},
+          "data_type": "integer",
+          "constraints": [],
+          "quote": null,
+          "tags": [],
+          "granularity": null
+        }
+      },
+      "meta": {},
+      "source_meta": {},
+      "tags": [],
+      "config": { "enabled": true, "event_time": null },
+      "patch_path": null,
+      "unrendered_config": {},
+      "relation_name": "relation_name",
+      "created_at": 1738663617.317515,
+      "unrendered_database": null,
+      "unrendered_schema": "schema"
+    }
+  },
+  "macros": {
+    "sample_macro": {
+      "name": "sample_macro",
+      "resource_type": "macro",
+      "package_name": "sample_project",
+      "path": "macros/sample_macro.sql",
+      "original_file_path": "macros/sample_macro.sql",
+      "unique_id": "sample_macro",
+      "macro_sql": "macro sql code",
+      "depends_on": { "macros": [] },
+      "description": "description",
+      "meta": {},
+      "docs": { "show": true, "node_color": null },
+      "patch_path": "path",
+      "arguments": [],
+      "created_at": 1700000000.0,
+      "supported_languages": null
+    }
+  },
+  "docs": {
+    "sample_docs": {
+      "name": "sample_docs",
+      "resource_type": "doc",
+      "package_name": "project_name",
+      "path": "sample_docs.md",
+      "original_file_path": "sample_docs.md",
+      "unique_id": "sample_docs",
+      "block_contents": "sample docs contents"
+    }
+  },
+  "exposures": {},
+  "metrics": {},
+  "groups": {},
+  "selectors": {},
+  "disabled": {},
+  "parent_map": { "sample_node": ["sample_source"] },
+  "child_map": { "sample_source": ["sample_node"] },
+  "group_map": {},
+  "saved_queries": {},
+  "semantic_models": {},
+  "unit_tests": {}
+}

@@ -60,7 +60,7 @@ class ManifestStream(DbtArtifactsStream):
     """Stream for manifest.json."""
 
     name: ClassVar[str] = "manifest"
-    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id"]
     replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "manifest.schema.json"
 
@@ -101,11 +101,24 @@ class ManifestStream(DbtArtifactsStream):
 
         # Yield records for each top-level key
         for key in top_level_keys:
+            # Initialize record
+            record = {
+                "artifact_type": "manifest",
+                "invocation_id": invocation_id,
+                "unique_id": None,
+                "generated_at": generated_at,
+                "metadata": metadata,
+            }
+
             # Extract items for each key
             try:
                 items = data.get(key, {}).values()
             except AttributeError:
                 items = []
+
+            if len(items) == 0:
+                record.update({key: None})
+                yield record
 
             for item in items:
                 # Convert columns key to a list of dictionaries
@@ -127,14 +140,12 @@ class ManifestStream(DbtArtifactsStream):
                     parsed_item["resources"] = resources
 
                 # Build and yield the record
-                record = {
-                    "artifact_type": "manifest",
-                    "invocation_id": invocation_id,
-                    "unique_id": unique_id,
-                    "generated_at": generated_at,
-                    "metadata": metadata,
-                    key: parsed_item,
-                }
+                record.update(
+                    {
+                        "unique_id": unique_id,
+                        key: parsed_item,
+                    }
+                )
 
                 yield record
 
@@ -162,7 +173,7 @@ class CatalogStream(DbtArtifactsStream):
         generated_at = metadata.get("generated_at")
 
         # Define top-level keys
-        top_level_keys = ["nodes", "sources", "errors"]
+        top_level_keys = ["nodes", "sources"]
 
         # Yield records for each top-level key
         for key in top_level_keys:
@@ -171,6 +182,8 @@ class CatalogStream(DbtArtifactsStream):
                 items = data.get(key, {}).values()
             except AttributeError:
                 items = []
+
+            errors = data.get("errors")
 
             for item in items:
                 # Convert columns and stats key to lists of dictionaries
@@ -187,6 +200,7 @@ class CatalogStream(DbtArtifactsStream):
                     "generated_at": generated_at,
                     "metadata": metadata,
                     key: parsed_item,
+                    "errors": errors,
                 }
 
                 yield record
