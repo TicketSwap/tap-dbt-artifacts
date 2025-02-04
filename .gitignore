@@ -79,7 +79,7 @@ instance/
 docs/_build/
 
 # PyBuilder
-target/
+# target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -134,3 +134,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Linter cache
+.ruff_cache/
+
+# VS Code
+.vscode
+
+# Ignore plugins
+plugins/
