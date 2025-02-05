@@ -16,28 +16,32 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
 ]
 license = "Apache-2.0"
 license-files = [ "LICENSE" ]
-requires-python = ">=3.9"
-dynamic = ["dependencies"]
-
-[tool.poetry]
-packages = [
-    { include = "tap_dbt_artifacts" },
+requires-python = "<3.13,>=3.9"
+dependencies = [
+    "singer-sdk~=0.44.2",
 ]
 
-[tool.poetry.dependencies]
-singer-sdk = { version="~=0.43.1", extras = [] }
-fs-s3fs = { version = "~=1.1.1", optional = true }
+[project.optional-dependencies]
+s3 = [
+    "fs-s3fs~=1.1.1",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = ">=8"
-singer-sdk = { version="~=0.43.1", extras = ["testing"] }
+[project.scripts]
+# CLI declaration
+tap-dbt-artifacts = 'tap_dbt_artifacts.tap:TapDbtArtifacts.cli'
 
-[tool.poetry.extras]
-s3 = ["fs-s3fs"]
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "singer-sdk[testing]~=0.44.2",
+]
+[tool.hatch.build.targets.wheel]
+packages = [
+    "tap_dbt_artifacts",
+]
 
 [tool.pytest.ini_options]
 addopts = [
@@ -64,9 +68,7 @@ allow-star-arg-any = true
 convention = "google"
 
 [build-system]
-requires = ["poetry-core>=2,<3"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-# CLI declaration
-tap-dbt-artifacts = 'tap_dbt_artifacts.tap:TapDbtArtifacts.cli'
+requires = [
+    "hatchling>=1,<2",
+]
+build-backend = "hatchling.build"

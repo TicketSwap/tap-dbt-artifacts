@@ -1,0 +1,385 @@
+{
+  "type": "object",
+  "title": "CatalogArtifact",
+  "properties": {
+    "artifact_type": {
+      "const": "catalog"
+    },
+    "invocation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "unique_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "metadata": {
+      "type": "object",
+      "title": "CatalogMetadata",
+      "properties": {
+        "dbt_schema_version": {
+          "type": "string"
+        },
+        "dbt_version": {
+          "type": "string",
+          "default": "1.7.14"
+        },
+        "generated_at": {
+          "type": "string"
+        },
+        "invocation_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "env": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "propertyNames": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "nodes": {
+      "type": "object",
+      "title": "CatalogTable",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "title": "TableMetadata",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "database": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "comment": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "owner": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false,
+          "required": ["type", "schema", "name"]
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "ColumnMetadata",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "index": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "comment": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "additionalProperties": false,
+            "required": ["type", "index", "name"]
+          }
+        },
+        "stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "StatsItem",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "include": {
+                "type": "boolean"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "additionalProperties": false,
+            "required": ["id", "label", "value", "include"]
+          }
+        },
+        "unique_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "additionalProperties": false,
+      "required": ["columns", "stats"]
+    },
+    "sources": {
+      "type": "object",
+      "title": "CatalogTable",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "title": "TableMetadata",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "database": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "comment": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "owner": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "additionalProperties": false,
+          "required": ["type", "schema", "name"]
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "ColumnMetadata",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "index": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "comment": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "additionalProperties": false,
+            "required": ["type", "index", "name"]
+          }
+        },
+        "stats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "title": "StatsItem",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "include": {
+                "type": "boolean"
+              },
+              "description": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null
+              }
+            },
+            "additionalProperties": false,
+            "required": ["id", "label", "value", "include"]
+          }
+        },
+        "unique_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "additionalProperties": false,
+      "required": ["metadata", "columns", "stats"]
+    },
+    "errors": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "artifact_type",
+    "invocation_id",
+    "unique_id",
+    "generated_at",
+    "metadata"
+  ]
+}

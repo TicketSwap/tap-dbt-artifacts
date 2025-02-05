@@ -1,12 +1,16 @@
 """DbtArtifacts tap class."""
 
-from __future__ import annotations
+from singer_sdk import Stream, Tap
+from singer_sdk import typing as th
 
-from singer_sdk import Tap
-from singer_sdk import typing as th  # JSON schema typing helpers
+from tap_dbt_artifacts.streams import (
+    CatalogStream,
+    ManifestStream,
+    RunResultsStream,
+    SourcesStream,
+)
 
-# TODO: Import your custom stream types here:
-from tap_dbt_artifacts import streams
+STREAM_TYPES = [RunResultsStream, ManifestStream, CatalogStream, SourcesStream]
 
 
 class TapDbtArtifacts(Tap):
@@ -14,48 +18,15 @@ class TapDbtArtifacts(Tap):
 
     name = "tap-dbt-artifacts"
 
-    # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "auth_token",
-            th.StringType,
+            name="dbt_target_dir",
+            wrapped=th.StringType,
             required=True,
-            secret=True,  # Flag config as protected.
-            title="Auth Token",
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "project_ids",
-            th.ArrayType(th.StringType),
-            required=True,
-            title="Project IDs",
-            description="Project IDs to replicate",
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "api_url",
-            th.StringType,
-            title="API URL",
-            default="https://api.mysample.com",
-            description="The url for the API service",
+            default="target",
         ),
     ).to_dict()
 
-    def discover_streams(self) -> list[streams.DbtArtifactsStream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of discovered streams.
-        """
-        return [
-            streams.GroupsStream(self),
-            streams.UsersStream(self),
-        ]
-
-
-if __name__ == "__main__":
-    TapDbtArtifacts.cli()
+    def discover_streams(self) -> list[Stream]:
+        """Return a list of discovered streams."""
+        return [stream_class(tap=self) for stream_class in STREAM_TYPES]

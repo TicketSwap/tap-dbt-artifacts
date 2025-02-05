@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
+    "dbt_version": "1.9.1",
+    "generated_at": "2025-02-03T08:51:59.368843Z",
+    "invocation_id": "62b2b2aa-fc53-4e0b-943f-3e33fbdee886",
+    "env": {}
+  },
+  "nodes": {
+    "sample_node": {
+      "metadata": {
+        "type": "BASE TABLE",
+        "schema": "schema",
+        "name": "node",
+        "database": "databse",
+        "comment": null,
+        "owner": "user"
+      },
+      "columns": {
+        "col_1": {
+          "type": "character varying(256)",
+          "index": 1,
+          "name": "col_1",
+          "comment": null
+        },
+        "col_2": {
+          "type": "character varying(256)",
+          "index": 2,
+          "name": "col_2",
+          "comment": null
+        }
+      },
+      "stats": {
+        "has_stats": {
+          "id": "has_stats",
+          "label": "Has Stats?",
+          "value": false,
+          "include": false,
+          "description": "Indicates whether there are statistics for this table"
+        }
+      },
+      "unique_id": "sample_node"
+    }
+  },
+  "sources": {
+    "sample_source": {
+      "metadata": {
+        "type": "BASE TABLE",
+        "schema": "schema",
+        "name": "sample_source",
+        "database": "database",
+        "comment": null,
+        "owner": "user"
+      },
+      "columns": {
+        "col_1": {
+          "type": "timestamp without time zone",
+          "index": 1,
+          "name": "col_1",
+          "comment": null
+        },
+        "col_2": {
+          "type": "integer",
+          "index": 2,
+          "name": "col_1",
+          "comment": null
+        }
+      },
+      "stats": {
+        "has_stats": {
+          "id": "has_stats",
+          "label": "Has Stats?",
+          "value": false,
+          "include": false,
+          "description": "Indicates whether there are statistics for this table"
+        }
+      },
+      "unique_id": "sample_source"
+    }
+  },
+  "errors": ["sample_error_1", "sample_error_2"]
+}
