@@ -59,11 +59,11 @@ simpleeval==1.0.3
     # via singer-sdk
 simplejson==3.19.3
     # via singer-sdk
-singer-sdk==0.44.2
+singer-sdk==0.44.3
     # via ticketswap-tap-dbt-artifacts (pyproject.toml)
 six==1.17.0
     # via fs
-sqlalchemy==2.0.37
+sqlalchemy==2.0.38
     # via singer-sdk
 typing-extensions==4.12.2
     # via
