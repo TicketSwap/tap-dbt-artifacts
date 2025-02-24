@@ -2,28 +2,11 @@
   "type": "object",
   "title": "CatalogArtifact",
   "properties": {
-    "artifact_type": {
-      "const": "catalog"
-    },
     "invocation_id": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+      "type": ["string", "null"]
     },
     "unique_id": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+      "type": ["string", "null"]
     },
     "generated_at": {
       "type": "string",
@@ -198,14 +181,7 @@
           }
         },
         "unique_id": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "type": ["string", "null"],
           "default": null
         }
       },
@@ -345,14 +321,7 @@
           }
         },
         "unique_id": {
-          "anyOf": [
-            {
-              "type": "string"
-            },
-            {
-              "type": "null"
-            }
-          ],
+          "type": ["string", "null"],
           "default": null
         }
       },
@@ -360,26 +329,9 @@
       "required": ["metadata", "columns", "stats"]
     },
     "errors": {
-      "anyOf": [
-        {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        {
-          "type": "null"
-        }
-      ],
-      "default": null
+      "type": ["array", "null"]
     }
   },
   "additionalProperties": false,
-  "required": [
-    "artifact_type",
-    "invocation_id",
-    "unique_id",
-    "generated_at",
-    "metadata"
-  ]
+  "required": ["invocation_id", "unique_id", "generated_at"]
 }

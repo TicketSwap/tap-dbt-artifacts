@@ -2,28 +2,11 @@
   "type": "object",
   "title": "RunResultsArtifact",
   "properties": {
-    "artifact_type": {
-      "const": "run_results"
-    },
     "invocation_id": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+      "type": ["string", "null"]
     },
     "unique_id": {
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "null"
-        }
-      ]
+      "type": ["string", "null"]
     },
     "generated_at": {
       "type": "string",
@@ -73,6 +56,7 @@
         "status": {
           "anyOf": [
             {
+              "type": "string",
               "enum": [
                 "success",
                 "error",
@@ -82,9 +66,11 @@
               ]
             },
             {
+              "type": "string",
               "enum": ["pass", "error", "fail", "warn", "skipped"]
             },
             {
+              "type": "string",
               "enum": ["pass", "warn", "error", "runtime error"]
             }
           ]
@@ -148,27 +134,13 @@
           ]
         },
         "failures": {
-          "anyOf": [
-            {
-              "type": "integer"
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": ["integer", "null"]
         },
         "unique_id": {
           "type": "string"
         },
         "compiled": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "null"
-            }
-          ]
+          "type": ["boolean", "null"]
         },
         "compiled_code": {
           "anyOf": [
@@ -257,20 +229,9 @@
       "type": "number"
     },
     "args": {
-      "type": "object",
-      "propertyNames": {
-        "type": "string"
-      }
+      "type": "object"
     }
   },
   "additionalProperties": false,
-  "required": [
-    "artifact_type",
-    "invocation_id",
-    "unique_id",
-    "generated_at",
-    "metadata",
-    "results",
-    "elapsed_time"
-  ]
+  "required": ["invocation_id", "unique_id", "generated_at", "elapsed_time"]
 }

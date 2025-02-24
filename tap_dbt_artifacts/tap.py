@@ -10,7 +10,12 @@ from tap_dbt_artifacts.streams import (
     SourcesStream,
 )
 
-STREAM_TYPES = [RunResultsStream, ManifestStream, CatalogStream, SourcesStream]
+STREAM_TYPES = [
+    RunResultsStream,
+    ManifestStream,
+    CatalogStream,
+    SourcesStream,
+]
 
 
 class TapDbtArtifacts(Tap):

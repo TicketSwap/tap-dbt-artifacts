@@ -32,3 +32,13 @@ plugins:
     - name: target-jsonl
       variant: andyh1203
       pip_url: target-jsonl
+    - name: target-csv
+      variant: meltanolabs
+      pip_url: git+https://github.com/MeltanoLabs/target-csv.git
+      config:
+        add_record_metadata: true
+        flattening_enabled: true
+        flattening_max_depth: 5
+    - name: target-redshift
+      variant: ticketswap
+      pip_url: git+https://github.com/TicketSwap/target-redshift.git
