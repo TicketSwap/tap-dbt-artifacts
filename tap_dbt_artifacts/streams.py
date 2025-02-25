@@ -13,7 +13,7 @@ class RunResultsStream(DbtArtifactsStream):
     """Stream for run_results.json."""
 
     name: ClassVar[str] = "run_results"
-    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
     replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "run-results.schema.json"
 
@@ -43,7 +43,6 @@ class RunResultsStream(DbtArtifactsStream):
             unique_id = result.get("unique_id")
 
             record = {
-                "artifact_type": "run_results",
                 "invocation_id": invocation_id,
                 "unique_id": unique_id,
                 "generated_at": generated_at,
@@ -60,7 +59,7 @@ class ManifestStream(DbtArtifactsStream):
     """Stream for manifest.json."""
 
     name: ClassVar[str] = "manifest"
-    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id"]
+    primary_keys: ClassVar[list[str]] = ["invocation_id"]
     replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "manifest.schema.json"
 
@@ -103,7 +102,6 @@ class ManifestStream(DbtArtifactsStream):
         for key in top_level_keys:
             # Initialize record
             record = {
-                "artifact_type": "manifest",
                 "invocation_id": invocation_id,
                 "unique_id": None,
                 "generated_at": generated_at,
@@ -117,7 +115,7 @@ class ManifestStream(DbtArtifactsStream):
                 items = []
 
             if len(items) == 0:
-                record.update({key: None})
+                record.update({key: {}})
                 yield record
 
             for item in items:
@@ -154,7 +152,7 @@ class CatalogStream(DbtArtifactsStream):
     """Stream for catalog.json."""
 
     name: ClassVar[str] = "catalog"
-    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
     replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "catalog.schema.json"
 
@@ -194,7 +192,6 @@ class CatalogStream(DbtArtifactsStream):
 
                 # Build and yield the record
                 record = {
-                    "artifact_type": "catalog",
                     "invocation_id": invocation_id,
                     "unique_id": unique_id,
                     "generated_at": generated_at,
@@ -210,7 +207,7 @@ class SourcesStream(DbtArtifactsStream):
     """Stream for sources.json."""
 
     name: ClassVar[str] = "sources"
-    primary_keys: ClassVar[list[str]] = ["artifact_type", "invocation_id", "unique_id"]
+    primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
     replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "sources.schema.json"
 
@@ -237,7 +234,6 @@ class SourcesStream(DbtArtifactsStream):
             unique_id = result.get("unique_id")
 
             record = {
-                "artifact_type": "sources",
                 "invocation_id": invocation_id,
                 "unique_id": unique_id,
                 "generated_at": generated_at,
