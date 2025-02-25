@@ -39,6 +39,7 @@ plugins:
         add_record_metadata: true
         flattening_enabled: true
         flattening_max_depth: 5
+        output_path: output
     - name: target-redshift
       variant: ticketswap
       pip_url: git+https://github.com/TicketSwap/target-redshift.git

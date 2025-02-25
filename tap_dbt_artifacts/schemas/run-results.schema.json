@@ -54,25 +54,17 @@
       "title": "RunResultOutput",
       "properties": {
         "status": {
-          "anyOf": [
-            {
-              "type": "string",
-              "enum": [
-                "success",
-                "error",
-                "skipped",
-                "partial success",
-                "no-op"
-              ]
-            },
-            {
-              "type": "string",
-              "enum": ["pass", "error", "fail", "warn", "skipped"]
-            },
-            {
-              "type": "string",
-              "enum": ["pass", "warn", "error", "runtime error"]
-            }
+          "type": "string",
+          "enum": [
+            "no-op",
+            "error",
+            "success",
+            "fail",
+            "runtime error",
+            "warn",
+            "pass",
+            "skipped",
+            "partial success"
           ]
         },
         "timing": {
