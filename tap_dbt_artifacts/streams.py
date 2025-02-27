@@ -14,7 +14,6 @@ class RunResultsStream(DbtArtifactsStream):
 
     name: ClassVar[str] = "run_results"
     primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
-    replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "run-results.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
@@ -60,7 +59,6 @@ class ManifestStream(DbtArtifactsStream):
 
     name: ClassVar[str] = "manifest"
     primary_keys: ClassVar[list[str]] = ["invocation_id"]
-    replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "manifest.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
@@ -153,7 +151,6 @@ class CatalogStream(DbtArtifactsStream):
 
     name: ClassVar[str] = "catalog"
     primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
-    replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "catalog.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
@@ -208,7 +205,6 @@ class SourcesStream(DbtArtifactsStream):
 
     name: ClassVar[str] = "sources"
     primary_keys: ClassVar[list[str]] = ["invocation_id", "unique_id"]
-    replication_key: ClassVar[str] = "generated_at"
     schema_filepath: ClassVar[Path] = SCHEMAS_DIR / "sources.schema.json"
 
     def extract_records(self, data: dict) -> Iterable[dict]:
