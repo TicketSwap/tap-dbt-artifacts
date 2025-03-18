@@ -63,7 +63,7 @@ singer-sdk==0.44.2
     # via ticketswap-tap-dbt-artifacts (pyproject.toml)
 six==1.17.0
     # via fs
-sqlalchemy==2.0.37
+sqlalchemy==2.0.39
     # via singer-sdk
 typing-extensions==4.12.2
     # via
