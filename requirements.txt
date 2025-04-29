@@ -51,7 +51,7 @@ rpds-py==0.22.3
     # via
     #   jsonschema
     #   referencing
-setuptools==70.3.0
+setuptools==80.0.0
     # via
     #   fs
     #   singer-sdk
