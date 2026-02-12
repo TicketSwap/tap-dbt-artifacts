@@ -1,0 +1,33 @@
+name: Update uv.lock for Dependabot PRs
+
+on:
+  pull_request:
+    types: ["opened", "synchronize", "reopened"]
+
+permissions:
+  contents: write
+
+jobs:
+  update-uv-lock:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Update uv.lock
+        run: uv lock
+
+      - name: Commit updated uv.lock
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add uv.lock
+          git diff --staged --quiet || (git commit -m "chore: auto-update uv.lock" && git push)
