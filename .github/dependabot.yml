@@ -5,20 +5,6 @@
 
 version: 2
 updates:
-  - package-ecosystem: "docker"
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-      time: "09:30"
-      timezone: "Europe/Amsterdam"
-  - package-ecosystem: "github-actions"
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
-      day: "tuesday"
-      time: "09:30"
-      timezone: "Europe/Amsterdam"
   - package-ecosystem: "pip"
     directory: "/" # Location of package manifests
     schedule:
@@ -26,3 +12,7 @@ updates:
       day: "tuesday"
       time: "09:30"
       timezone: "Europe/Amsterdam"
+    allow:
+      - dependency-name: "singer-sdk"
+      - dependency-name: "fs-s3fs"
+      - dependency-name: "pytest"
