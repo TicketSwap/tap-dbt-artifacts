@@ -36,7 +36,7 @@ tap-dbt-artifacts = 'tap_dbt_artifacts.tap:TapDbtArtifacts.cli'
 [dependency-groups]
 dev = [
     "pytest==8.4.2",
-    "singer-sdk[testing]==0.44.2",
+    "singer-sdk[testing]==0.48.1",
 ]
 [tool.hatch.build.targets.wheel]
 packages = [
