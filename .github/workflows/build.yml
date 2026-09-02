@@ -13,8 +13,8 @@ jobs:
     outputs:
       version: ${{ steps.baipp.outputs.package_version }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: hynek/build-and-inspect-python-package@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df # v2
         id: baipp
 
   publish:
@@ -29,12 +29,12 @@ jobs:
     #   url: https://pypi.org/project/ticketswap-tap-dbt-artifacts/${{ steps.baipp.outputs.package_version }}
     if: startsWith(github.ref, 'refs/tags/')
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: Packages
           path: dist
       - name: Upload wheel to release
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@29e53e917877a24fad85510ded594ab3c9ca12de # v2
         with:
           repo_token: ${{secrets.GITHUB_TOKEN}}
           file: dist/*.whl
@@ -45,4 +45,4 @@ jobs:
       - name: Publish
         ## TODO: create a trusted publisher on PyPI
         ## https://docs.pypi.org/trusted-publishers/
-        uses: pypa/gh-action-pypi-publish@v1.12.4
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc # v1.12.4

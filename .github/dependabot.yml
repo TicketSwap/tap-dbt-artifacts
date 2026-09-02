@@ -16,3 +16,11 @@ updates:
       - dependency-name: "singer-sdk"
       - dependency-name: "fs-s3fs"
       - dependency-name: "pytest"
+  - package-ecosystem: github-actions
+    directory: /
+    open-pull-requests-limit: 20
+    schedule:
+      interval: weekly
+      time: 06:00
+      day: wednesday
+      timezone: Europe/Amsterdam
