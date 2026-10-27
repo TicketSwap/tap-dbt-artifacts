@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
@@ -16,3 +16,25 @@ updates:
       - dependency-name: "singer-sdk"
       - dependency-name: "fs-s3fs"
       - dependency-name: "pytest"
+
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: '09:30'
+      timezone: Europe/Amsterdam
+    groups:
+      pre-commit:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: '09:30'
+      timezone: Europe/Amsterdam
+    groups:
+      actions:
+        patterns: ["*"]
